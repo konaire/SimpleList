@@ -2,7 +2,11 @@
 <resources>
     <string name="app_name">Simple List</string>
 
+    <string name="no_data">The list is empty</string>
     <string name="network_error">Something went wrong</string>
+    <string name="try_again">Try again</string>
 
-    <string name="repo_list">List of repositories</string>
+    <string name="repo_list_title">List of repositories</string>
+    <string name="repo_list_item_created_date">Created date: %s</string>
+    <string name="repo_list_item_updated_date">Updated date: %s</string>
 </resources>

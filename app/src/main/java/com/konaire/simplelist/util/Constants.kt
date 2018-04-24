@@ -8,5 +8,6 @@ class Constants {
         const val BASE_URL = "https://api.github.com/"
 
         const val ITEMS_PER_PAGE = 15
+        const val VISIBLE_ITEM_THRESHOLD = 3
     }
 }

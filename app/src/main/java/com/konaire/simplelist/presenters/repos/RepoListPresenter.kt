@@ -31,16 +31,28 @@ class RepoListPresenterImpl @Inject constructor(
     }
 
     override fun getFirstRepos() {
+        view.showProgress()
+
         getFirstReposSubscription = interactor.getRepos(null)
             .observeOn(AndroidSchedulers.mainThread()).subscribe(
-                { view.showData() }, { error -> view.showError(R.string.network_error) }
+                { response ->
+                    view.hideProgress()
+                    view.setNextItem(response.next)
+                    view.showData(ArrayList(response.repos))
+                }, {
+                    view.hideProgress()
+                    view.showError(R.string.network_error)
+                }
             )
     }
 
     override fun getMoreRepos(page: Int) {
         getMoreReposSubscription = interactor.getRepos(page)
             .observeOn(AndroidSchedulers.mainThread()).subscribe(
-                { view.showData() }, { error -> view.showError(R.string.network_error) }
+                { response ->
+                    view.setNextItem(response.next)
+                    view.addData(ArrayList(response.repos))
+                }, { view.showReloadItem() }
             )
     }
 }

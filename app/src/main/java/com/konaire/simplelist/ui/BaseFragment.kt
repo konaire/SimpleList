@@ -8,7 +8,6 @@ import com.konaire.simplelist.util.toast
 /**
  * Created by Evgeny Eliseyev on 23/04/2018.
  */
-
 abstract class BaseFragment: Fragment(), BaseView {
     override fun onResume() {
         super.onResume()

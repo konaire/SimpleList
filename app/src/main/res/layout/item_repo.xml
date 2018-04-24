@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:padding="@dimen/default_indent">
+
+    <TextView
+        android:id="@+id/name"
+        style="@style/ItemText"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/createdDate"
+        style="@style/ItemText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <TextView
+        android:id="@+id/updatedDate"
+        style="@style/ItemText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createdDate" />
+
+    <TextView
+        android:id="@+id/description"
+        style="@style/ItemText"
+        android:layout_marginTop="@dimen/default_indent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updatedDate" />
+</android.support.constraint.ConstraintLayout>

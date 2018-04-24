@@ -6,6 +6,8 @@ import com.konaire.simplelist.util.getNextPage
 
 import io.reactivex.Single
 
+import retrofit2.HttpException
+
 import javax.inject.Inject
 
 /**
@@ -19,6 +21,11 @@ class RepoListInteractorImpl @Inject constructor(
     private val api: Api
 ): RepoListInteractor {
     override fun getRepos(page: Int?): Single<RepoResponse> = api.getRepos(page).map { result ->
-        RepoResponse(result.response()?.body() ?: emptyList(), result.getNextPage())
+        val response = result.response()
+        if (response?.isSuccessful == false) {
+            throw HttpException(response)
+        }
+
+        RepoResponse(response?.body() ?: ArrayList(), result.getNextPage())
     }
 }
