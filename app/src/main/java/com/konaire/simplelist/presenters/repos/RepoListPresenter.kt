@@ -14,21 +14,31 @@ import javax.inject.Inject
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
 interface RepoListPresenter: BasePresenter {
-    fun getRepos()
+    fun getFirstRepos()
+    fun getMoreRepos(page: Int)
 }
 
 class RepoListPresenterImpl @Inject constructor(
     private val interactor: RepoListInteractor,
     private val view: RepoListView
 ): RepoListPresenter {
-    private var getReposSubscription: Disposable? = null
+    private var getFirstReposSubscription: Disposable? = null
+    private var getMoreReposSubscription: Disposable? = null
 
     override fun stopSubscriptions() {
-        getReposSubscription?.dispose()
+        getFirstReposSubscription?.dispose()
+        getMoreReposSubscription?.dispose()
     }
 
-    override fun getRepos() {
-        getReposSubscription = interactor.getRepos()
+    override fun getFirstRepos() {
+        getFirstReposSubscription = interactor.getRepos(null)
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(
+                { view.showData() }, { error -> view.showError(R.string.network_error) }
+            )
+    }
+
+    override fun getMoreRepos(page: Int) {
+        getMoreReposSubscription = interactor.getRepos(page)
             .observeOn(AndroidSchedulers.mainThread()).subscribe(
                 { view.showData() }, { error -> view.showError(R.string.network_error) }
             )

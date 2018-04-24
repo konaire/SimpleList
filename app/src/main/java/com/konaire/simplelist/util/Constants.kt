@@ -5,6 +5,8 @@ package com.konaire.simplelist.util
  */
 class Constants {
     companion object {
-        const val BASE_URL = "https://api.github.com/users/JakeWharton/"
+        const val BASE_URL = "https://api.github.com/"
+
+        const val ITEMS_PER_PAGE = 15
     }
 }

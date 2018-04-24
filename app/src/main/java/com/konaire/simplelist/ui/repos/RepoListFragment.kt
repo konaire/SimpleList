@@ -40,7 +40,7 @@ class RepoListFragment: BaseFragment(), RepoListView {
         inflater.inflate(R.layout.fragment_repo_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        presenter.getRepos()
+        presenter.getFirstRepos()
     }
 
     override fun getTitle(): String = getString(R.string.repo_list)
