@@ -37,6 +37,7 @@ dependencies {
 
     // Support
     implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support.constraint:constraint-layout:$constraintVersion"
 
     // Dagger
