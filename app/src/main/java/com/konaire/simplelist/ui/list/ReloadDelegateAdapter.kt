@@ -11,15 +11,15 @@ import com.konaire.simplelist.R
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
 class ReloadDelegateAdapter(
-    private val listener: OnItemSelectedListener<ViewType>
+    private val listener: OnItemClickedListener<ViewType>
 ): DelegateAdapter<ViewType> {
     class ReloadViewHolder(
         rootView: View,
-        private val listener: OnItemSelectedListener<ViewType>
+        private val listener: OnItemClickedListener<ViewType>
     ): RecyclerView.ViewHolder(rootView) {
         fun bind(item: ViewType) {
             val button = itemView.findViewById<View>(R.id.button)
-            button.setOnClickListener { listener.onItemSelected(item, button) }
+            button.setOnClickListener { listener.onItemClicked(item, button) }
         }
     }
 

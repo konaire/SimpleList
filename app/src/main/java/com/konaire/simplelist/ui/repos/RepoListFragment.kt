@@ -34,6 +34,7 @@ class RepoListFragment: BaseFragment(), RepoListView {
     @Inject lateinit var presenter: RepoListPresenter
 
     private val adapter: RepoAdapter by lazy {
+        presenter.getFirstRepos()
         RepoAdapter(this)
     }
 
@@ -57,6 +58,16 @@ class RepoListFragment: BaseFragment(), RepoListView {
         super.onAttach(context)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.stopSubscriptions()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_repo_list, container, false)
 
@@ -77,13 +88,11 @@ class RepoListFragment: BaseFragment(), RepoListView {
         list.addOnScrollListener(scrollListener)
         list.addItemDecoration(DividerDecoration(activity!!))
         swipe.setOnRefreshListener { presenter.getFirstRepos() }
-
-        presenter.getFirstRepos()
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         list.clearOnScrollListeners()
+        super.onDestroyView()
     }
 
     override fun getTitle(): String = getString(R.string.repo_list_title)
@@ -119,7 +128,7 @@ class RepoListFragment: BaseFragment(), RepoListView {
 
     override fun showReloadItem() = adapter.showReloadItem()
 
-    override fun onItemSelected(item: ViewType, view: View) {
+    override fun onItemClicked(item: ViewType, view: View) {
         if (item is Repo) {
             Log.i(TAG, item.id.toString())
         } else { // reload item

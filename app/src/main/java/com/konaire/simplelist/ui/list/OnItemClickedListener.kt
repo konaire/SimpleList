@@ -5,6 +5,6 @@ import android.view.View
 /**
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
-interface OnItemSelectedListener<in T> where T: ViewType {
-    fun onItemSelected(item: T, view: View)
+interface OnItemClickedListener<in T> where T: ViewType {
+    fun onItemClicked(item: T, view: View)
 }

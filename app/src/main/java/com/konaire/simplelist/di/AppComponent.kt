@@ -1,7 +1,7 @@
 package com.konaire.simplelist.di
 
 import com.konaire.simplelist.App
-import com.konaire.simplelist.di.util.NetworkModule
+import com.konaire.simplelist.di.network.NetworkModule
 
 import dagger.Component
 import dagger.android.AndroidInjector

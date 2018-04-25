@@ -1,9 +1,10 @@
-package com.konaire.simplelist.di.util
+package com.konaire.simplelist.di.network
 
 import com.google.gson.GsonBuilder
 
 import com.konaire.simplelist.BuildConfig
 import com.konaire.simplelist.network.Api
+import com.konaire.simplelist.network.DelegatingSSLSocketFactory
 import com.konaire.simplelist.util.Constants
 
 import dagger.Module
@@ -19,9 +20,13 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-import javax.inject.Singleton
-
+import java.security.KeyStore
 import java.util.concurrent.TimeUnit
+
+import javax.inject.Singleton
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 /**
  * Created by Evgeny Eliseyev on 23/04/2018.
@@ -30,7 +35,29 @@ import java.util.concurrent.TimeUnit
 class NetworkModule {
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideSSLSocketFactory(): SSLSocketFactory = DelegatingSSLSocketFactory()
+
+    @Singleton
+    @Provides
+    fun provideTrustManager(): X509TrustManager {
+        val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+
+        trustManagerFactory.init(null as KeyStore?)
+
+        val trustManagers = trustManagerFactory.trustManagers
+        if (trustManagers.size != 1 || trustManagers[0] !is X509TrustManager) {
+            throw IllegalStateException("Unexpected default trust managers:" + trustManagers.toString())
+        }
+
+        return trustManagers[0] as X509TrustManager
+    }
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(
+        sslSocketFactory: SSLSocketFactory,
+        trustManager: X509TrustManager
+    ): OkHttpClient {
         val builder = OkHttpClient.Builder()
         builder.connectTimeout(20, TimeUnit.SECONDS)
         builder.readTimeout(30, TimeUnit.SECONDS)
@@ -39,6 +66,7 @@ class NetworkModule {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = loggingLevel
 
+        builder.sslSocketFactory(sslSocketFactory, trustManager)
         builder.addInterceptor(interceptor)
         return builder.build()
     }

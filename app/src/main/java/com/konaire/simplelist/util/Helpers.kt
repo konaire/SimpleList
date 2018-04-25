@@ -12,9 +12,9 @@ import java.util.Locale
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
 fun String.formatAsDate(): String {
-    val inf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
+    val inf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz", Locale.getDefault())
     val outf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-    return outf.format(inf.parse(this))
+    return outf.format(inf.parse(this.replace("Z", "UTC")))
 }
 
 fun Context.toast(message: CharSequence) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()

@@ -4,7 +4,7 @@ package com.konaire.simplelist.ui.list
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
 abstract class PaginationAdapter(
-    listener: OnItemSelectedListener<ViewType>?
+    listener: OnItemClickedListener<ViewType>?
 ): BaseAdapter<ViewType>(listener) {
     var hasBottomLoader: Boolean = false
 

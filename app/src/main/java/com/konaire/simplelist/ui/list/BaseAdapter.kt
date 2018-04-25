@@ -7,7 +7,7 @@ import android.view.ViewGroup
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
 abstract class BaseAdapter<T>(
-    protected val listener: OnItemSelectedListener<T>?
+    protected val listener: OnItemClickedListener<T>?
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() where T: ViewType {
     protected var delegateAdapters: MutableMap<Int, DelegateAdapter<T>> = HashMap()
     protected var items: MutableList<T> = ArrayList()

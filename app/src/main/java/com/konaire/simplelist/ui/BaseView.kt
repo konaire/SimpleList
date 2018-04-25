@@ -1,6 +1,6 @@
 package com.konaire.simplelist.ui
 
-import com.konaire.simplelist.ui.list.OnItemSelectedListener
+import com.konaire.simplelist.ui.list.OnItemClickedListener
 import com.konaire.simplelist.ui.list.ViewType
 
 /**
@@ -11,7 +11,7 @@ interface BaseView {
     fun showError(messageResource: Int)
 }
 
-interface BaseListView: BaseView, OnItemSelectedListener<ViewType> {
+interface BaseListView: BaseView, OnItemClickedListener<ViewType> {
     fun showProgress()
     fun hideProgress()
 

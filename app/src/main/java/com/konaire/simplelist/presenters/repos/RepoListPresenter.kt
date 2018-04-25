@@ -8,6 +8,8 @@ import com.konaire.simplelist.ui.repos.RepoListView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 
+import java.util.concurrent.TimeUnit
+
 import javax.inject.Inject
 
 /**
@@ -33,7 +35,7 @@ class RepoListPresenterImpl @Inject constructor(
     override fun getFirstRepos() {
         view.showProgress()
 
-        getFirstReposSubscription = interactor.getRepos(null)
+        getFirstReposSubscription = interactor.getRepos(null).delay(500, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread()).subscribe(
                 { response ->
                     view.hideProgress()

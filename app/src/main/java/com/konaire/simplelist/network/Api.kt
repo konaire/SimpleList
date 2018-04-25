@@ -15,5 +15,5 @@ import retrofit2.http.Query
  */
 interface Api {
     @GET("users/JakeWharton/repos")
-    fun getRepos(@Query("page") page: Int?, @Query("per_page") pageSize: Int = Constants.ITEMS_PER_PAGE): Single<Result<MutableList<Repo>>>
+    fun getJakeWhartonRepos(@Query("page") page: Int?, @Query("per_page") pageSize: Int = Constants.ITEMS_PER_PAGE): Single<Result<MutableList<Repo>>>
 }

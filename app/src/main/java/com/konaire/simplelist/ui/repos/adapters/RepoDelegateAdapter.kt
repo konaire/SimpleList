@@ -9,18 +9,18 @@ import android.widget.TextView
 import com.konaire.simplelist.R
 import com.konaire.simplelist.models.Repo
 import com.konaire.simplelist.ui.list.DelegateAdapter
-import com.konaire.simplelist.ui.list.OnItemSelectedListener
+import com.konaire.simplelist.ui.list.OnItemClickedListener
 import com.konaire.simplelist.ui.list.ViewType
 
 /**
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
 class RepoDelegateAdapter(
-    private val listener: OnItemSelectedListener<Repo>
+    private val listener: OnItemClickedListener<Repo>
 ): DelegateAdapter<ViewType> {
     class RepoViewHolder(
         rootView: View,
-        private val listener: OnItemSelectedListener<Repo>
+        private val listener: OnItemClickedListener<Repo>
     ): RecyclerView.ViewHolder(rootView) {
         fun bind(repo: Repo)  = with(itemView) {
             val name = findViewById<TextView>(R.id.name)
@@ -33,7 +33,7 @@ class RepoDelegateAdapter(
             createdDate.text = context.getString(R.string.repo_list_item_created_date, repo.formattedCreatedDate())
             updatedDate.text = context.getString(R.string.repo_list_item_updated_date, repo.formattedUpdatedDate())
 
-            setOnClickListener { listener.onItemSelected(repo, this) }
+            setOnClickListener { listener.onItemClicked(repo, this) }
         }
     }
 
