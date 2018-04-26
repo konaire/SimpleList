@@ -6,19 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import com.konaire.simplelist.R
 import com.konaire.simplelist.ui.BaseFragment
 
-import javax.inject.Inject
-
 /**
  * Created by Evgeny Eliseyev on 23/04/2018.
  * Do not use this class directly. It should be created via DI.
  */
-interface Navigation {
-    fun showFragment(activity: AppCompatActivity?, fragment: BaseFragment, notAddToBackStack: Boolean = false)
-    fun closeFragment(activity: AppCompatActivity?)
-}
-
-class NavigationImpl @Inject constructor(): Navigation {
-    override fun showFragment(activity: AppCompatActivity?, fragment: BaseFragment, notAddToBackStack: Boolean) {
+class Navigation {
+    fun showFragment(activity: AppCompatActivity?, fragment: BaseFragment, notAddToBackStack: Boolean = false) {
         if (activity == null) {
             return
         }
@@ -50,7 +43,7 @@ class NavigationImpl @Inject constructor(): Navigation {
         }
     }
 
-    override fun closeFragment(activity: AppCompatActivity?) {
+    fun closeFragment(activity: AppCompatActivity?) {
         if (activity == null) {
             return
         }

@@ -77,7 +77,7 @@ class RepoListFragment: BaseFragment(), RepoListView {
             Constants.VISIBLE_ITEM_THRESHOLD,
             layoutManager,
             {
-                if (adapter.hasBottomLoader) {
+                if (adapter.hasBottomProgress && !adapter.hasBottomReloader) {
                     presenter.getMoreRepos(getNextPage())
                 }
             }
@@ -88,6 +88,7 @@ class RepoListFragment: BaseFragment(), RepoListView {
         list.addOnScrollListener(scrollListener)
         list.addItemDecoration(DividerDecoration(activity!!))
         swipe.setOnRefreshListener { presenter.getFirstRepos() }
+        emptyView?.visibility = if (adapter.itemCount > 0) View.GONE else View.VISIBLE
     }
 
     override fun onDestroyView() {
@@ -121,8 +122,8 @@ class RepoListFragment: BaseFragment(), RepoListView {
     override fun addData(data: MutableList<ViewType>) = adapter.addData(data)
 
     override fun setNextItem(next: Int?) {
-        val hasBottomLoader = (next != null && next > 0)
-        adapter.hasBottomLoader = hasBottomLoader
+        val hasBottomProgress = (next != null && next > 0)
+        adapter.hasBottomProgress = hasBottomProgress
         setNextPage(next ?: 0)
     }
 

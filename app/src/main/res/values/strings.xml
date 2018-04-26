@@ -4,6 +4,7 @@
 
     <string name="no_data">The list is empty</string>
     <string name="network_error">Something went wrong</string>
+    <string name="network_error_switch_to_db">Something went wrong. Load cached data.</string>
     <string name="try_again">Try again</string>
 
     <!-- Repo -->

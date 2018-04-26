@@ -34,27 +34,35 @@ class RepoListPresenterImpl @Inject constructor(
 
     override fun getFirstRepos() {
         view.showProgress()
-
-        getFirstReposSubscription = interactor.getRepos(null).delay(500, TimeUnit.MILLISECONDS)
-            .observeOn(AndroidSchedulers.mainThread()).subscribe(
-                { response ->
-                    view.hideProgress()
-                    view.setNextItem(response.next)
-                    view.showData(ArrayList(response.repos))
-                }, {
-                    view.hideProgress()
-                    view.showError(R.string.network_error)
-                }
-            )
+        getFirstReposSubscription =
+            interactor.getReposRemotely(null)
+                .delay(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .onErrorResumeNext(interactor.getReposLocally(null).doAfterSuccess({
+                    view.showError(R.string.network_error_switch_to_db)
+                })).doOnDispose { view.hideProgress() }
+                .subscribe(
+                    { response ->
+                        view.hideProgress()
+                        view.setNextItem(response.next)
+                        view.showData(ArrayList(response.repos))
+                    }, {
+                        view.hideProgress()
+                        view.showError(R.string.network_error)
+                    }
+                )
     }
 
     override fun getMoreRepos(page: Int) {
-        getMoreReposSubscription = interactor.getRepos(page)
-            .observeOn(AndroidSchedulers.mainThread()).subscribe(
-                { response ->
-                    view.setNextItem(response.next)
-                    view.addData(ArrayList(response.repos))
-                }, { view.showReloadItem() }
-            )
+        getMoreReposSubscription =
+            interactor.getReposRemotely(page)
+                .onErrorResumeNext(interactor.getReposLocally(page).doAfterSuccess({
+                    view.showError(R.string.network_error_switch_to_db)
+                })).doOnDispose { view.showReloadItem() }
+                .subscribe(
+                    { response ->
+                        view.setNextItem(response.next)
+                        view.addData(ArrayList(response.repos))
+                    }, { view.showReloadItem() }
+                )
     }
 }

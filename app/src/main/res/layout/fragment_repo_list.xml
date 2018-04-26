@@ -27,7 +27,6 @@
         android:text="@string/no_data"
         android:textColor="@android:color/darker_gray"
         android:textSize="@dimen/big_text_size"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -9,6 +9,8 @@ import com.konaire.simplelist.util.Navigation
 
 import dagger.android.support.DaggerAppCompatActivity
 
+import io.realm.Realm
+
 import kotlinx.android.synthetic.main.activity_repo.*
 
 import javax.inject.Inject
@@ -18,6 +20,7 @@ import javax.inject.Inject
  */
 class RepoActivity: DaggerAppCompatActivity() {
     @Inject lateinit var navigation: Navigation
+    @Inject lateinit var realm: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,11 @@ class RepoActivity: DaggerAppCompatActivity() {
         if (savedInstanceState == null) {
             navigation.showFragment(this, RepoListFragment.create(), true)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
