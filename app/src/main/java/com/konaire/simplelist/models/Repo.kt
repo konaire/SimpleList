@@ -37,7 +37,7 @@ open class Repo(
     @SerializedName("updated_at")
     private var updatedAt: String
 ): RealmObject(), ViewType {
-    constructor(): this(0, "", "", null, "", "")
+    constructor(): this(0, "", "", null, "2018-04-23T09:53:30Z", "2018-04-23T09:53:30Z")
 
     override fun getViewType(): Int = ListItemType.REPO.ordinal
 

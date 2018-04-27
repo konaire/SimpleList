@@ -3,6 +3,7 @@ package com.konaire.simplelist.interactors.repos
 import com.konaire.simplelist.models.Repo
 import com.konaire.simplelist.models.RepoResponse
 import com.konaire.simplelist.network.Api
+import com.konaire.simplelist.util.Constants
 import com.konaire.simplelist.util.DatabaseSelectException
 
 import io.reactivex.Single
@@ -91,7 +92,7 @@ class RepoListInteractorImplTest {
         interactor.getReposLocally(null).toFlowable().subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue { it.repos.size == 15 }
+        subscriber.assertValue { it.repos.size == Constants.ITEMS_PER_PAGE }
     }
 
     @Test
@@ -106,7 +107,7 @@ class RepoListInteractorImplTest {
         interactor.getReposLocally(2).toFlowable().subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue { response -> response.repos.size == 3 && response.next == 3 }
+        subscriber.assertValue { response -> response.repos.size < Constants.ITEMS_PER_PAGE && response.next == 3 }
     }
 
     @Suppress("UNCHECKED_CAST")
