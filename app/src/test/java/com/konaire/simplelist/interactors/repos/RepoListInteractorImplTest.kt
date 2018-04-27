@@ -46,8 +46,7 @@ class RepoListInteractorImplTest {
 
     @Test
     fun isRequestCrashesAfterError() {
-        val result = Result.error<MutableList<Repo>>(NullPointerException())
-        `when`(api.getJakeWhartonRepos(any(), anyInt(), anyString())).thenReturn(Single.just(result))
+        mockNetwork(Result.error<MutableList<Repo>>(NullPointerException()))
 
         val subscriber = TestSubscriber.create<RepoResponse>()
         interactor.getReposRemotely(null, scheduler).toFlowable().subscribe(subscriber)
@@ -59,9 +58,9 @@ class RepoListInteractorImplTest {
 
     @Test
     fun isDbSendsErrorForEmptyData() {
-        val result = mockRealmResults(ArrayList())
+        mockDatabase(mockRealmResults(ArrayList()))
+
         val subscriber = TestSubscriber.create<RepoResponse>()
-        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(result)
         interactor.getReposLocally(null).toFlowable().subscribe(subscriber)
 
         subscriber.assertError { it is DatabaseSelectException }
@@ -69,11 +68,11 @@ class RepoListInteractorImplTest {
 
     @Test
     fun isDbLoadsPartialData() {
-        val result = mockRealmResults(listOf(
+        mockDatabase(mockRealmResults(listOf(
             Repo(), Repo(), Repo()
-        ).toMutableList())
+        ).toMutableList()))
+
         val subscriber = TestSubscriber.create<RepoResponse>()
-        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(result)
         interactor.getReposLocally(null).toFlowable().subscribe(subscriber)
 
         subscriber.assertNoErrors()
@@ -82,13 +81,13 @@ class RepoListInteractorImplTest {
 
     @Test
     fun isDbLoadsFullData() {
-        val result = mockRealmResults(listOf(
+        mockDatabase(mockRealmResults(listOf(
             Repo(), Repo(), Repo(), Repo(), Repo(),
             Repo(), Repo(), Repo(), Repo(), Repo(),
             Repo(), Repo(), Repo(), Repo(), Repo()
-        ).toMutableList())
+        ).toMutableList()))
+
         val subscriber = TestSubscriber.create<RepoResponse>()
-        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(result)
         interactor.getReposLocally(null).toFlowable().subscribe(subscriber)
 
         subscriber.assertNoErrors()
@@ -97,17 +96,25 @@ class RepoListInteractorImplTest {
 
     @Test
     fun isDbLoadsDataWithPagination() {
-        val result = mockRealmResults(listOf(
+        mockDatabase(mockRealmResults(listOf(
             Repo(), Repo(), Repo(), Repo(), Repo(), Repo(),
             Repo(), Repo(), Repo(), Repo(), Repo(), Repo(),
             Repo(), Repo(), Repo(), Repo(), Repo(), Repo()
-        ).toMutableList())
+        ).toMutableList()))
+
         val subscriber = TestSubscriber.create<RepoResponse>()
-        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(result)
         interactor.getReposLocally(2).toFlowable().subscribe(subscriber)
 
         subscriber.assertNoErrors()
         subscriber.assertValue { response -> response.repos.size < Constants.ITEMS_PER_PAGE && response.next == 3 }
+    }
+
+    private fun mockNetwork(result: Result<MutableList<Repo>>) {
+        `when`(api.getJakeWhartonRepos(any(), anyInt(), anyString())).thenReturn(Single.just(result))
+    }
+
+    private fun mockDatabase(result: RealmResults<Repo>) {
+        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(result)
     }
 
     @Suppress("UNCHECKED_CAST")

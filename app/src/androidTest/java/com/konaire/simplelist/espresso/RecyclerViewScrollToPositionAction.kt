@@ -1,4 +1,4 @@
-package com.konaire.simplelist.test
+package com.konaire.simplelist.espresso
 
 import android.support.test.espresso.UiController
 import android.support.test.espresso.ViewAction

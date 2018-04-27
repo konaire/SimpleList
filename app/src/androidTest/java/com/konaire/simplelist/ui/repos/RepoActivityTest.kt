@@ -14,9 +14,9 @@ import com.konaire.simplelist.R
 import com.konaire.simplelist.di.DaggerMockAppComponent
 import com.konaire.simplelist.models.Repo
 import com.konaire.simplelist.network.Api
-import com.konaire.simplelist.test.RecyclerViewItemCountAssertion
-import com.konaire.simplelist.test.RecyclerViewScrollToPositionAction
-import com.konaire.simplelist.test.RecyclerViewScrollingIdlingResource
+import com.konaire.simplelist.espresso.RecyclerViewItemCountAssertion
+import com.konaire.simplelist.espresso.RecyclerViewScrollToPositionAction
+import com.konaire.simplelist.espresso.RecyclerViewScrollingIdlingResource
 import com.konaire.simplelist.util.Constants
 
 import io.reactivex.Single
@@ -58,16 +58,15 @@ class RepoActivityTest {
 
     @Test
     fun checkWhenEverythingIsFine() {
-        val dbResult = mockRealmResults(listOf(
-            Repo(), Repo(), Repo()
-        ).toMutableList())
-
         val networkResult = Result.response(Response.success(listOf(
             Repo(), Repo(), Repo(), Repo(), Repo(), Repo()
         ).toMutableList()))
 
-        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(dbResult)
-        `when`(api.getJakeWhartonRepos(any(), anyInt(), anyString())).thenReturn(Single.just(networkResult))
+        val dbResult = mockRealmResults(listOf(
+            Repo(), Repo(), Repo()
+        ).toMutableList())
+
+        mockDatasources(networkResult, dbResult)
 
         activityRule.launchActivity(Intent())
         Espresso.onView(ViewMatchers.withId(R.id.list))
@@ -76,12 +75,12 @@ class RepoActivityTest {
 
     @Test
     fun checkWhenNetworkCrashes() {
+        val networkResult = Result.error<MutableList<Repo>>(NullPointerException())
         val dbResult = mockRealmResults(listOf(
             Repo(), Repo(), Repo()
         ).toMutableList())
-        val networkResult = Result.error<MutableList<Repo>>(NullPointerException())
-        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(dbResult)
-        `when`(api.getJakeWhartonRepos(any(), anyInt(), anyString())).thenReturn(Single.just(networkResult))
+
+        mockDatasources(networkResult, dbResult)
 
         activityRule.launchActivity(Intent())
         Espresso.onView(ViewMatchers.withId(R.id.list))
@@ -90,10 +89,9 @@ class RepoActivityTest {
 
     @Test
     fun checkWhenBothSourcesAreEmpty() {
-        val dbResult = mockRealmResults(ArrayList())
         val networkResult = Result.error<MutableList<Repo>>(NullPointerException())
-        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(dbResult)
-        `when`(api.getJakeWhartonRepos(any(), anyInt(), anyString())).thenReturn(Single.just(networkResult))
+        val dbResult = mockRealmResults(ArrayList())
+        mockDatasources(networkResult, dbResult)
 
         activityRule.launchActivity(Intent())
         Espresso.onView(ViewMatchers.withId(R.id.list))
@@ -102,7 +100,6 @@ class RepoActivityTest {
 
     @Test
     fun checkThatScrollWorksCorrectly() {
-        val dbResult = mockRealmResults(ArrayList())
         val networkResult = Result.response(Response.success(listOf(
                 Repo(), Repo(), Repo(), Repo(), Repo(),
                 Repo(), Repo(), Repo(), Repo(), Repo(),
@@ -111,8 +108,9 @@ class RepoActivityTest {
             Headers.of("Link", "<https://api.github.com/user/66577/repos?per_page=15&sort=full_name&page=2>; rel=\"next\"")
         ))
 
-        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(dbResult)
-        `when`(api.getJakeWhartonRepos(any(), anyInt(), anyString())).thenReturn(Single.just(networkResult))
+        val dbResult = mockRealmResults(ArrayList())
+
+        mockDatasources(networkResult, dbResult)
 
         activityRule.launchActivity(Intent())
         val list = activityRule.activity.findViewById(R.id.list) as RecyclerView
@@ -123,6 +121,11 @@ class RepoActivityTest {
             .check(RecyclerViewItemCountAssertion.withItemCount(Matchers.greaterThan(Constants.ITEMS_PER_PAGE + 1))) // because we have progress item in the bottom
 
         IdlingRegistry.getInstance().unregister(idlingResource)
+    }
+
+    private fun mockDatasources(networkResult: Result<MutableList<Repo>>, dbResult: RealmResults<Repo>) {
+        `when`(realm.where(Repo::class.java).findAllAsync().sort("fullName")).thenReturn(dbResult)
+        `when`(api.getJakeWhartonRepos(any(), anyInt(), anyString())).thenReturn(Single.just(networkResult))
     }
 
     @Suppress("UNCHECKED_CAST")

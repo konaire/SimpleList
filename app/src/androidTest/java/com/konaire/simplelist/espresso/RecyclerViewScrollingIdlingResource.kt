@@ -1,4 +1,4 @@
-package com.konaire.simplelist.test
+package com.konaire.simplelist.espresso
 
 import android.support.test.espresso.IdlingResource
 import android.support.v7.widget.RecyclerView
