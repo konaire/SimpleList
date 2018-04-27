@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn okio.**
+-dontwarn okhttp3.internal.**
+-dontwarn retrofit2.Platform$Java8
+-dontwarn com.google.errorprone.annotations.**
+
+-keep class com.google.errorprone.annotations.** { *; }
+
+-keepattributes Signature
+-keepattributes Exceptions
