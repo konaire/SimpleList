@@ -64,7 +64,8 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Instrumentation testing
-    androidTestImplementation "com.android.support.test:runner:$runnerVersion"
+    androidTestImplementation "com.android.support.test:rules:$testsVersion"
+    androidTestImplementation "com.android.support.test:runner:$testsVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"

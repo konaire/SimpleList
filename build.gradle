@@ -2,23 +2,23 @@
 buildscript {
     ext {
         gradleVersion = '3.1.2'
-        kotlinVersion = '1.2.40'
+        kotlinVersion = '1.2.41'
         realmVersion = '5.1.0'
 
         supportVersion = '27.1.1'
         constraintVersion = '1.1.0'
 
         daggerVersion = '2.15'
-        rxjavaVersion = '2.1.12'
+        rxjavaVersion = '2.1.13'
         rxandroidVersion = '2.0.2'
 
-        gsonVersion = '2.8.2'
+        gsonVersion = '2.8.4'
         retrofitVersion = '2.4.0'
         okhttpVersion = '3.10.0'
 
         junitVersion = '4.12'
-        runnerVersion = '1.0.1'
-        espressoVersion = '3.0.1'
+        testsVersion = '1.0.2'
+        espressoVersion = '3.0.2'
         mockitoVersion = '2.18.3'
     }
 
