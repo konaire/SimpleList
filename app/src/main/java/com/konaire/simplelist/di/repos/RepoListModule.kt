@@ -15,12 +15,9 @@ import dagger.Module
  */
 @Module
 interface RepoListModule {
-    @Binds
-    fun provideRepoListPresenter(presenter: RepoListPresenterImpl): RepoListPresenter
+    @Binds fun provideRepoListInteractor(interactor: RepoListInteractorImpl): RepoListInteractor
 
-    @Binds
-    fun provideRepoListInteractor(interactor: RepoListInteractorImpl): RepoListInteractor
+    @Binds fun provideRepoListPresenter(presenter: RepoListPresenterImpl): RepoListPresenter
 
-    @Binds
-    fun provideRepoListView(fragment: RepoListFragment): RepoListView
+    @Binds fun provideRepoListView(fragment: RepoListFragment): RepoListView
 }

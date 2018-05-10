@@ -1,13 +1,9 @@
 package com.konaire.simplelist.ui.repos
 
 import android.os.Bundle
-import android.view.MenuItem
 
 import com.konaire.simplelist.R
-import com.konaire.simplelist.ui.BaseFragment
-import com.konaire.simplelist.util.Navigation
-
-import dagger.android.support.DaggerAppCompatActivity
+import com.konaire.simplelist.ui.BaseActivity
 
 import io.realm.Realm
 
@@ -18,8 +14,7 @@ import javax.inject.Inject
 /**
  * Created by Evgeny Eliseyev on 23/04/2018.
  */
-class RepoActivity: DaggerAppCompatActivity() {
-    @Inject lateinit var navigation: Navigation
+class RepoActivity: BaseActivity() {
     @Inject lateinit var realm: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,23 +30,5 @@ class RepoActivity: DaggerAppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                navigation.closeFragment(this)
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.mainContainer) as BaseFragment
-        if (fragment.defaultBackButtonBehaviour()) {
-            super.onBackPressed()
-        }
     }
 }
