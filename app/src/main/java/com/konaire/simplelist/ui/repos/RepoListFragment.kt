@@ -63,11 +63,6 @@ class RepoListFragment: BaseFragment(), RepoListView {
         retainInstance = true
     }
 
-    override fun onStop() {
-        super.onStop()
-        presenter.stopSubscriptions()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_repo_list, container, false)
 
@@ -94,6 +89,11 @@ class RepoListFragment: BaseFragment(), RepoListView {
     override fun onDestroyView() {
         list.clearOnScrollListeners()
         super.onDestroyView()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        presenter.stopSubscriptions()
     }
 
     override fun getTitle(): String = getString(R.string.repo_list_title)

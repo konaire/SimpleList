@@ -32,16 +32,12 @@ class RepoListPresenterImpl @Inject constructor(
         disposables.add(interactor.getReposRemotely(null)
             .onErrorResumeNext(interactor.getReposLocally(null).doAfterSuccess({
                 view.showError(R.string.network_error_switch_to_db)
-            })).doOnDispose { view.hideProgress() }
+            })).doFinally { view.hideProgress() }
             .subscribe(
                 { response ->
-                    view.hideProgress()
                     view.setNextItem(response.next)
                     view.showData(ArrayList(response.repos))
-                }, {
-                    view.hideProgress()
-                    view.showError(R.string.network_error)
-                }
+                }, { view.showError(R.string.network_error) }
             )
         )
     }
