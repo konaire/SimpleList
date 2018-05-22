@@ -6,7 +6,7 @@ import com.konaire.simplelist.util.Constants
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
 abstract class PaginationAdapter(
-    listener: OnItemClickedListener<ViewType>?
+    listener: OnItemClickedListener<ViewType>
 ): BaseAdapter<ViewType>(listener) {
     var hasBottomProgress: Boolean = false
     var hasBottomReloader: Boolean = false

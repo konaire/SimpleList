@@ -1,5 +1,6 @@
 package com.konaire.simplelist.ui.list
 
+import android.support.v4.util.ArrayMap
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
@@ -7,9 +8,9 @@ import android.view.ViewGroup
  * Created by Evgeny Eliseyev on 24/04/2018.
  */
 abstract class BaseAdapter<T>(
-    protected val listener: OnItemClickedListener<T>?
+    protected val listener: OnItemClickedListener<T>? = null
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() where T: ViewType {
-    protected var delegateAdapters: MutableMap<Int, DelegateAdapter<T>> = HashMap()
+    protected var delegateAdapters: MutableMap<Int, DelegateAdapter<T>> = ArrayMap()
     protected var items: MutableList<T> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
